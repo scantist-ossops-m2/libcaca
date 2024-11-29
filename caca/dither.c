@@ -6,8 +6,8 @@
  *  This library is free software. It comes without any warranty, to
  *  the extent permitted by applicable law. You can redistribute it
  *  and/or modify it under the terms of the Do What the Fuck You Want
- *  to Public License, Version 2, as published by Sam Hocevar. See
- *  http://www.wtfpl.net/ for more details.
+ *  to Public License, Version 2, as published by the WTFPL Task Force.
+ *  See http://www.wtfpl.net/ for more details.
  */
 
 /*
@@ -116,7 +116,7 @@ enum color_mode
 struct caca_dither
 {
     int bpp, has_palette, has_alpha;
-    int w, h, pitch;
+    size_t w, h, pitch;
     int rmask, gmask, bmask, amask;
     int rright, gright, bright, aright;
     int rleft, gleft, bleft, aleft;
@@ -991,10 +991,10 @@ int caca_dither_bitmap(caca_canvas_t *cv, int x, int y, int w, int h,
         /* First get RGB */
         if(d->antialias)
         {
-            fromx = (x - x1) * w / deltax;
-            fromy = (y - y1) * h / deltay;
-            tox = (x - x1 + 1) * w / deltax;
-            toy = (y - y1 + 1) * h / deltay;
+            fromx = (uint64_t)(x - x1) * w / deltax;
+            fromy = (uint64_t)(y - y1) * h / deltay;
+            tox = (uint64_t)(x - x1 + 1) * w / deltax;
+            toy = (uint64_t)(y - y1 + 1) * h / deltay;
 
             /* We want at least one pixel */
             if(tox == fromx) tox++;
@@ -1017,10 +1017,10 @@ int caca_dither_bitmap(caca_canvas_t *cv, int x, int y, int w, int h,
         }
         else
         {
-            fromx = (x - x1) * w / deltax;
-            fromy = (y - y1) * h / deltay;
-            tox = (x - x1 + 1) * w / deltax;
-            toy = (y - y1 + 1) * h / deltay;
+            fromx = (uint64_t)(x - x1) * w / deltax;
+            fromy = (uint64_t)(y - y1) * h / deltay;
+            tox = (uint64_t)(x - x1 + 1) * w / deltax;
+            toy = (uint64_t)(y - y1 + 1) * h / deltay;
 
             /* tox and toy can overflow the canvas, but they cannot overflow
              * when averaged with fromx and fromy because these are guaranteed
